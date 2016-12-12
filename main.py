@@ -10,7 +10,7 @@ DOMAIN_NAME = get_domain_name(HOMEPAGE)
 QUEUE_FILE = 'projects/' + PROJECT_NAME + '/queue.txt'
 CRAWLED_FILE = 'projects/' + PROJECT_NAME + '/crawled.txt'
 SUMMARY_FILE = 'projects/' + PROJECT_NAME + '/summary.txt'
-NUMBER_OF_THREADS = 4
+NUMBER_OF_THREADS = int(input("Number of threads: "))
 queue = Queue()
 Spider(PROJECT_NAME, HOMEPAGE, DOMAIN_NAME)
 

@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 from link_finder import LinkFinder
+from socket import timeout
 from domain import *
 from general import *
 
@@ -12,6 +13,7 @@ class Spider:
     queue_file = ''
     crawled_file = ''
     summary_file = ''
+    errors_file = ''
     num_pdf = 0
     num_html = 0
     num_media = 0
@@ -29,6 +31,7 @@ class Spider:
         Spider.queue_file = 'projects/' + Spider.project_name + '/queue.txt'
         Spider.crawled_file = 'projects/' + Spider.project_name + '/crawled.txt'
         Spider.summary_file = 'projects/' + Spider.project_name + '/summary.txt'
+        Spider.errors_file = 'projects/' + Spider.project_name + '/errors.txt'
         self.boot()
         self.crawl_page('First spider', Spider.base_url)
 
@@ -58,7 +61,7 @@ class Spider:
         Spider.pages += 1
         html_string = ''
         try:
-            response = urlopen(page_url)
+            response = urlopen(page_url, timeout=10)
             if 'text/html' in response.getheader('Content-Type'):
                 html_bytes = response.read()
                 Spider.total_size += (len(html_bytes)/1000)
@@ -80,6 +83,7 @@ class Spider:
 
         except Exception as e:
             print(str(e))
+            append_to_file(Spider.errors_file, page_url + ":     " + str(e))
             Spider.num_errors += 1
             return set()
         return finder.page_links()

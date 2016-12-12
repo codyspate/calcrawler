@@ -13,9 +13,11 @@ def create_data_files(project_name, base_url):
     queue = os.path.join('projects', os.path.join(project_name , 'queue.txt'))
     crawled = os.path.join('projects', os.path.join(project_name,"crawled.txt"))
     summary = os.path.join('projects', os.path.join(project_name, "summary.txt"))
+    errors = os.path.join('projects', os.path.join(project_name, "errors.txt"))
     delete_file_contents(queue)
     delete_file_contents(crawled)
     delete_file_contents(summary)
+    delete_file_contents(errors)
     if not os.path.isfile(queue):
         write_file(queue, base_url)
     if not os.path.isfile(crawled):
@@ -23,6 +25,8 @@ def create_data_files(project_name, base_url):
     if not os.path.isfile(summary):
         t = "PDF count:     \nHTML/HTM count:     \nMedia files:     \nOther:     \nErrors:     \n\nTotal size:     "
         write_file(summary, t)
+    if not os.path.isfile(errors):
+        write_file(errors, '')
 
 
 # Create a new file
