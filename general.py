@@ -47,8 +47,8 @@ def update_summary(path, pname, url, pdf, html, media, other, errors, pages, siz
         f.write("Cal Crawler v1.0\n\n")
         f.write("Website: " + pname + '\n')
         f.write("URL: "+ url + '\n\n')
-        f.write("PDF count: " + pdf + "\nHTML/HTM count: " + html + "\nMedia files: " + media + "\nOther: " + other + "\nErrors: " + errors + "\n\nTotal Number of Pages: " + pages + "\nTotal size: " + size  + " MB")
-        f.write('Queue ' + queue) + ' | Crawled  ' + crawled)
+        f.write("PDF count: " + pdf + "\nHTML/HTM count: " + html + "\nMedia files: " + media + "\nOther: " + other + "\nErrors: " + errors + "\n\nTotal Number of Pages: " + pages + "\nTotal size: " + size  + " MB\n\n")
+        f.write('Queue: ' + queue + '\nCrawled:  ' + crawled)
 # Read a file and convert each line to set items
 def file_to_set(file_name):
     results = set()

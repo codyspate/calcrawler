@@ -99,4 +99,4 @@ class Spider:
         set_to_file(Spider.queue, Spider.queue_file)
         set_to_file(Spider.crawled, Spider.crawled_file)
         size = Spider.total_size/1000
-        update_summary(Spider.summary_file, Spider.project_name, Spider.base_url, str(Spider.num_pdf), str(Spider.num_html), str(Spider.num_media), str(Spider.num_other), str(Spider.num_errors), str(Spider.pages), str(size), str(len(Spider.queue)), str(len(Spider.crawled)))
+        update_summary(Spider.summary_file, Spider.project_name, Spider.base_url, str(Spider.num_pdf), str(Spider.num_html), str(Spider.num_media), str(Spider.num_other), str(Spider.num_errors), str(Spider.pages), str.format("{:.3f}", size), str(len(Spider.queue)), str(len(Spider.crawled)))

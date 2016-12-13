@@ -4,13 +4,13 @@ from spider import Spider
 from domain import *
 from general import *
 
-PROJECT_NAME = 'CDCR'
-HOMEPAGE = 'http://cdcr.ca.gov/'
+PROJECT_NAME = input("Project Name: ")
+HOMEPAGE = input('URL (inclue http:// or https://): ')
 DOMAIN_NAME = get_domain_name(HOMEPAGE)
 QUEUE_FILE = 'projects/' + PROJECT_NAME + '/queue.txt'
 CRAWLED_FILE = 'projects/' + PROJECT_NAME + '/crawled.txt'
 SUMMARY_FILE = 'projects/' + PROJECT_NAME + '/summary.txt'
-NUMBER_OF_THREADS = 8
+NUMBER_OF_THREADS = 4
 queue = Queue()
 Spider(PROJECT_NAME, HOMEPAGE, DOMAIN_NAME)
 
