@@ -31,14 +31,20 @@ def create_data_files(project_name, base_url):
 
 # Create a new file
 def write_file(path, data):
-    with open(path, 'w') as f:
-        f.write(data)
+    try:
+        with open(path, 'w') as f:
+            f.write(data)
+    except Exception as e:
+        print(str(e))
 
 
 # Add data onto an existing file
 def append_to_file(path, data):
-    with open(path, 'a') as file:
-        file.write(data + '\n')
+    try:
+        with open(path, 'a') as file:
+            file.write(data + '\n')
+    except Exception as e:
+        print(str(e))
 
 
 # Delete the contents of a file
@@ -64,6 +70,9 @@ def file_to_set(file_name):
 
 # Iterate through a set, each item will be a line in a file
 def set_to_file(links, file_name):
-    with open(file_name,"w") as f:
-        for l in sorted(links):
-            f.write(l+"\n")
+    try:
+        with open(file_name,"w") as f:
+            for l in sorted(links):
+                f.write(l+"\n")
+    except Exception as e:
+        print(str(e))

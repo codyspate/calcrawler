@@ -60,6 +60,7 @@ class Spider:
     def gather_links(page_url):
         Spider.pages += 1
         html_string = ''
+        page_url = page_url.replace(' ', '%20')
         try:
             response = urlopen(page_url, timeout=10)
             if 'text/html' in response.getheader('Content-Type'):
@@ -80,7 +81,7 @@ class Spider:
                 if t in page_url.lower() or (not page_url[-4] == '.' and not page_url[-5] == '.'):
                     Spider.num_html += 1
                     break
-
+            response.close()
         except Exception as e:
             print(str(e))
             append_to_file(Spider.errors_file, page_url + ":     " + str(e))
