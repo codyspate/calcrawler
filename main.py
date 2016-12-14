@@ -4,13 +4,16 @@ from spider import Spider
 from domain import *
 from general import *
 
-PROJECT_NAME = input("Project Name: ")
-HOMEPAGE = input('URL (inclue http:// or https://): ')
+#PROJECT_NAME = input("Project Name: ")
+HOMEPAGE = input('URL: ')
+if not '://' in HOMEPAGE:
+    HOMEPAGE = "http://" + HOMEPAGE + '/'
 DOMAIN_NAME = get_domain_name(HOMEPAGE)
+PROJECT_NAME = DOMAIN_NAME[:DOMAIN_NAME.index('.')]
 QUEUE_FILE = 'projects/' + PROJECT_NAME + '/queue.txt'
 CRAWLED_FILE = 'projects/' + PROJECT_NAME + '/crawled.txt'
 SUMMARY_FILE = 'projects/' + PROJECT_NAME + '/summary.txt'
-NUMBER_OF_THREADS = int(input("Number of threads: "))
+NUMBER_OF_THREADS = int(input("Number of threads: ") or 16)
 queue = Queue()
 Spider(PROJECT_NAME, HOMEPAGE, DOMAIN_NAME)
 

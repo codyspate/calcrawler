@@ -1,4 +1,5 @@
 from urllib.request import urlopen
+from urllib.parse import quote
 from link_finder import LinkFinder
 from socket import timeout
 from domain import *
@@ -14,11 +15,13 @@ class Spider:
     crawled_file = ''
     summary_file = ''
     errors_file = ''
+    #ext_link_errors_file = ''
     num_pdf = 0
     num_html = 0
     num_media = 0
     num_other = 0
     num_errors = 0
+    #num_broken_ext_links = 0
     total_size = 0
     pages = 0
     queue = set()
@@ -32,6 +35,7 @@ class Spider:
         Spider.crawled_file = 'projects/' + Spider.project_name + '/crawled.txt'
         Spider.summary_file = 'projects/' + Spider.project_name + '/summary.txt'
         Spider.errors_file = 'projects/' + Spider.project_name + '/errors.txt'
+        #Spider.ext_link_errors_file = 'projects/' + Spider.project_name + '/ext_link_errors.txt'
         self.boot()
         self.crawl_page('First spider', Spider.base_url)
 
@@ -60,7 +64,6 @@ class Spider:
     def gather_links(page_url):
         Spider.pages += 1
         html_string = ''
-        page_url = page_url.replace(' ', '%20')
         try:
             response = urlopen(page_url, timeout=10)
             if 'text/html' in response.getheader('Content-Type'):
@@ -69,6 +72,7 @@ class Spider:
                 html_string = html_bytes.decode("utf-8")
             finder = LinkFinder(Spider.base_url, page_url)
             finder.feed(html_string)
+
             if ".pdf" in page_url.lower():
                 Spider.num_pdf += 1
             media_types = ['.mp3', '.jpg', '.png', '.mpeg', '.ico', '.wmv', '.avi', '.mov', '.mng', '.gif', '.bmp', '.jpeg']
@@ -81,12 +85,16 @@ class Spider:
                 if t in page_url.lower() or (not page_url[-4] == '.' and not page_url[-5] == '.'):
                     Spider.num_html += 1
                     break
+
             response.close()
         except Exception as e:
             print(str(e))
             append_to_file(Spider.errors_file, page_url + ":     " + str(e))
             Spider.num_errors += 1
             return set()
+
+
+
         return finder.page_links()
 
     # Saves queue data to project files
@@ -96,7 +104,17 @@ class Spider:
             if (url in Spider.queue) or (url in Spider.crawled):
                 continue
             if not Spider.domain_name in get_domain_name(url):
+                # try:
+                #     ext_link = quote(url, safe="/:()=?#%&")
+                #     response = urlopen(ext_link, timeout=10)
+                #     response.close()
+                # except Exception as e:
+                #     Spider.num_broken_ext_links += 1
+                #     append_to_file(Spider.ext_link_errors_file, url + " : " + str(e))
                 continue
+            url = quote(url, safe="%/:=&?~+!$,;'@()*[]")
+            if '%20' in url[-3:]:
+                url = url[:-3]
             Spider.queue.add(url)
 
     @staticmethod

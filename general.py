@@ -14,10 +14,12 @@ def create_data_files(project_name, base_url):
     crawled = os.path.join('projects', os.path.join(project_name,"crawled.txt"))
     summary = os.path.join('projects', os.path.join(project_name, "summary.txt"))
     errors = os.path.join('projects', os.path.join(project_name, "errors.txt"))
+    #ext_link_errors = os.path.join('projects', os.path.join(project_name, "ext_link_errors.txt"))
     delete_file_contents(queue)
     delete_file_contents(crawled)
     delete_file_contents(summary)
     delete_file_contents(errors)
+    #delete_file_contents(ext_link_errors)
     if not os.path.isfile(queue):
         write_file(queue, base_url)
     if not os.path.isfile(crawled):
@@ -27,6 +29,8 @@ def create_data_files(project_name, base_url):
         write_file(summary, t)
     if not os.path.isfile(errors):
         write_file(errors, '')
+    # if not os.path.isfile(ext_link_errors):
+    #     write_file(ext_link_errors, '')
 
 
 # Create a new file
@@ -58,7 +62,7 @@ def update_summary(path, pname, url, pdf, html, media, other, errors, pages, siz
         f.write("Website: " + pname + '\n')
         f.write("URL: "+ url + '\n\n')
         f.write("PDF count: " + pdf + "\nHTML/HTM count: " + html + "\nMedia files: " + media + "\nOther: " + other + "\nErrors: " + errors + "\n\nTotal Number of Pages: " + pages + "\nTotal size: " + size  + " MB\n\n")
-        f.write('Queue: ' + queue + '\nCrawled:  ' + crawled)
+        f.write('Queue: ' + queue + '\nCrawled:  ' + crawled + "\n\n")
 # Read a file and convert each line to set items
 def file_to_set(file_name):
     results = set()
