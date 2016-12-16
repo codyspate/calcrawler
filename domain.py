@@ -10,7 +10,7 @@ def get_domain_name(url):
         string = ''
         for i in range(dots+1):
             string += results[((dots-i)+1) *-1]
-            if i < dots-1:
+            if i < dots:
                 string += '.'
         return string
         #return results[-3] + '.' + results[-2] + '.' + results[-1]

@@ -53,8 +53,7 @@ class Spider:
         if page_url not in Spider.crawled:
             print(thread_name + ' now crawling ' + page_url)
             print('Queue ' + str(len(Spider.queue)) + ' | Crawled  ' + str(len(Spider.crawled)))
-            links = Spider.gather_links(page_url)
-            Spider.add_links_to_queue(links)
+            Spider.add_links_to_queue(Spider.gather_links(page_url))
             Spider.queue.remove(page_url)
             Spider.crawled.add(page_url)
             Spider.update_files()
@@ -69,7 +68,7 @@ class Spider:
             if 'text/html' in response.getheader('Content-Type'):
                 html_bytes = response.read()
                 Spider.total_size += (len(html_bytes)/1000)
-                html_string = html_bytes.decode("utf-8")
+                html_string = html_bytes.decode("utf-8", errors='ignore')
             finder = LinkFinder(Spider.base_url, page_url)
             finder.feed(html_string)
 
@@ -89,11 +88,9 @@ class Spider:
             response.close()
         except Exception as e:
             print(str(e))
-            append_to_file(Spider.errors_file, page_url + ":     " + str(e))
+            append_to_file(Spider.errors_file, page_url + "   :     " + str(e))
             Spider.num_errors += 1
             return set()
-
-
 
         return finder.page_links()
 
@@ -112,7 +109,7 @@ class Spider:
                 #     Spider.num_broken_ext_links += 1
                 #     append_to_file(Spider.ext_link_errors_file, url + " : " + str(e))
                 continue
-            url = quote(url, safe="%/:=&?~+!$,;'@()*[]")
+            url = quote(url, safe="%/:=&?~+!$,;'@()*[]#")
             if '%20' in url[-3:]:
                 url = url[:-3]
             Spider.queue.add(url)
