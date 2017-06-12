@@ -35,6 +35,7 @@ class Spider:
         Spider.crawled_file = 'projects/' + Spider.project_name + '/crawled.txt'
         Spider.summary_file = 'projects/' + Spider.project_name + '/summary.txt'
         Spider.errors_file = 'projects/' + Spider.project_name + '/errors.txt'
+        Spider.media_file = 'projects/' + Spider.project_name + '/media.txt'
         #Spider.ext_link_errors_file = 'projects/' + Spider.project_name + '/ext_link_errors.txt'
         self.boot()
         self.crawl_page('First spider', Spider.base_url)
@@ -54,7 +55,10 @@ class Spider:
             print(thread_name + ' now crawling ' + page_url)
             print('Queue ' + str(len(Spider.queue)) + ' | Crawled  ' + str(len(Spider.crawled)))
             Spider.add_links_to_queue(Spider.gather_links(page_url))
-            Spider.queue.remove(page_url)
+            try:
+                Spider.queue.discard(page_url)
+            except KeyError as e:
+                print("WHY IS THIS HAPPENING!!!!!: " + str(e))
             Spider.crawled.add(page_url)
             Spider.update_files()
 
@@ -67,12 +71,13 @@ class Spider:
             response = urlopen(page_url, timeout=10)
             if 'text/html' in response.getheader('Content-Type'):
                 html_bytes = response.read()
-                Spider.total_size += (len(html_bytes)/1000)
+                if not "/#" in page_url:
+                    Spider.total_size += (len(html_bytes)/1000)
                 html_string = html_bytes.decode("utf-8", errors='ignore')
             finder = LinkFinder(Spider.base_url, page_url)
             finder.feed(html_string)
 
-            if ".pdf" in page_url.lower():
+            if 'pdf' in response.info()['Content-Type']:
                 Spider.num_pdf += 1
             media_types = ['.mp3', '.jpg', '.png', '.mpeg', '.ico', '.wmv', '.avi', '.mov', '.mng', '.gif', '.bmp', '.jpeg']
             for t in media_types:
@@ -92,6 +97,9 @@ class Spider:
             Spider.num_errors += 1
             return set()
 
+        Spider.num_media += finder.getImgCount()
+        Spider.total_size += (finder.getImgSize()/1000)
+        set_to_file(finder.getMedia(), Spider.media_file)
         return finder.page_links()
 
     # Saves queue data to project files
@@ -100,7 +108,7 @@ class Spider:
         for url in links:
             if (url in Spider.queue) or (url in Spider.crawled):
                 continue
-            if not Spider.domain_name in get_domain_name(url):
+            if not Spider.domain_name in get_domain_name(url) and not url[0] == '/':
                 # try:
                 #     ext_link = quote(url, safe="/:()=?#%&")
                 #     response = urlopen(ext_link, timeout=10)

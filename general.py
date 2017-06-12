@@ -14,11 +14,13 @@ def create_data_files(project_name, base_url):
     crawled = os.path.join('projects', os.path.join(project_name,"crawled.txt"))
     summary = os.path.join('projects', os.path.join(project_name, "summary.txt"))
     errors = os.path.join('projects', os.path.join(project_name, "errors.txt"))
+    media = os.path.join('projects', os.path.join(project_name, "media.txt"))
     #ext_link_errors = os.path.join('projects', os.path.join(project_name, "ext_link_errors.txt"))
     delete_file_contents(queue)
     delete_file_contents(crawled)
     delete_file_contents(summary)
     delete_file_contents(errors)
+    delete_file_contents(media)
     #delete_file_contents(ext_link_errors)
     if not os.path.isfile(queue):
         write_file(queue, base_url)
@@ -29,6 +31,8 @@ def create_data_files(project_name, base_url):
         write_file(summary, t)
     if not os.path.isfile(errors):
         write_file(errors, '')
+    if not os.path.isfile(media):
+        write_file(media, '')
     # if not os.path.isfile(ext_link_errors):
     #     write_file(ext_link_errors, '')
 
