@@ -26,6 +26,7 @@ class Spider:
     pages = 0
     queue = set()
     crawled = set()
+    media = set()
 
     def __init__(self, project_name, base_url, domain_name):
         Spider.project_name = project_name
@@ -47,6 +48,7 @@ class Spider:
         create_data_files(Spider.project_name, Spider.base_url)
         Spider.queue = file_to_set(Spider.queue_file)
         Spider.crawled = file_to_set(Spider.crawled_file)
+        Spider.media = file_to_set(Spider.media_file)
 
     # Updates user display, fills queue and updates files
     @staticmethod
@@ -58,7 +60,7 @@ class Spider:
             try:
                 Spider.queue.discard(page_url)
             except KeyError as e:
-                print("WHY IS THIS HAPPENING!!!!!: " + str(e))
+                print(str(e))
             Spider.crawled.add(page_url)
             Spider.update_files()
 
@@ -99,8 +101,17 @@ class Spider:
 
         Spider.num_media += finder.getImgCount()
         Spider.total_size += (finder.getImgSize()/1000)
-        set_to_file(finder.getMedia(), Spider.media_file)
+        Spider.add_media(finder.getMedia())
+
         return finder.page_links()
+
+    def add_media(links):
+        for img in links:
+            if img in Spider.media:
+                continue
+            img = quote(img, safe="%/:=&?~+!$,;'@()*[]#")
+            Spider.media.add(img)
+
 
     # Saves queue data to project files
     @staticmethod
@@ -126,5 +137,6 @@ class Spider:
     def update_files():
         set_to_file(Spider.queue, Spider.queue_file)
         set_to_file(Spider.crawled, Spider.crawled_file)
+        set_to_file(Spider.media, Spider.media_file)
         size = Spider.total_size/1000
         update_summary(Spider.summary_file, Spider.project_name, Spider.base_url, str(Spider.num_pdf), str(Spider.num_html), str(Spider.num_media), str(Spider.num_other), str(Spider.num_errors), str(Spider.pages), str.format("{:.3f}", size), str(len(Spider.queue)), str(len(Spider.crawled)))
