@@ -63,7 +63,7 @@ class Crawler(ttk.Frame):
         ttk.Label(self, text='Media').grid(column=0, row=9)
         ttk.Label(self, textvariable=self.media_count).grid(column=1, row=9)
 
-        ttk.Label(self, text='Errors (see log)').grid(column=0, row=10)
+        ttk.Label(self, text='Errors').grid(column=0, row=10)
         ttk.Label(self, textvariable=self.error_count).grid(column=1, row=10)
 
         ttk.Separator(self, orient='horizontal').grid(column=0, row=11, columnspan=4, sticky='ew')
