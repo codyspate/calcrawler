@@ -1,5 +1,6 @@
 
 import threading
+import os
 from queue import Queue
 from spider import Spider
 import tkinter
@@ -19,6 +20,9 @@ class Crawler(ttk.Frame):
         self.webpage_count = tkinter.IntVar()
         self.media_count = tkinter.IntVar()
         self.error_count = tkinter.IntVar()
+        self.message = tkinter.StringVar(value="")
+        self.PATH = tkinter.StringVar(value="")
+        self.n = 0
 
 
         self.init_gui()
@@ -62,6 +66,13 @@ class Crawler(ttk.Frame):
         ttk.Label(self, text='Errors (see log)').grid(column=0, row=10)
         ttk.Label(self, textvariable=self.error_count).grid(column=1, row=10)
 
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=11, columnspan=4, sticky='ew')
+
+        ttk.Label(self, text='Logs path').grid(column=0, row=12)
+        ttk.Label(self, textvariable=self.PATH).grid(column=1, row=12)
+
+        ttk.Label(self, textvariable=self.message).grid(column=0, row=14, columnspan=4)
+
         for child in self.winfo_children():
             child.grid_configure(padx=5, pady=5)
 
@@ -71,6 +82,7 @@ class Crawler(ttk.Frame):
             self.HOMEPAGE = "http://" + self.HOMEPAGE + '/'
         self.DOMAIN_NAME = get_domain_name(self.HOMEPAGE)
         self.PROJECT_NAME = self.DOMAIN_NAME[:self.DOMAIN_NAME.index('.')]
+        self.PATH.set(os.path.join(os.path.dirname(os.path.realpath(__file__)), self.PROJECT_NAME))
         self.QUEUE_FILE = 'projects/' + self.PROJECT_NAME + '/queue.txt'
         self.CRAWLED_FILE = 'projects/' + self.PROJECT_NAME + '/crawled.txt'
         self.SUMMARY_FILE = 'projects/' + self.PROJECT_NAME + '/summary.txt'
@@ -104,12 +116,18 @@ class Crawler(ttk.Frame):
         self.webpage_count.set(data['webpage'])
         self.media_count.set(data['media'])
         self.error_count.set(data['error'])
-        self.update()
-
+        self.update_idletasks()
 
     def crawl(self):
-        queued_links = file_to_set(self.QUEUE_FILE)        
+        queued_links = file_to_set(self.QUEUE_FILE)
         while len(queued_links) > 0:
+            self.n += 1
+            if self.n > 3:
+                self.n=1
+            dots = ""
+            for _ in range(self.n):
+                dots = dots + "."
+            self.message.set("Running" + dots)
             self.update_nums()
             queued_links = file_to_set(self.QUEUE_FILE)
             for link in queued_links:
@@ -117,6 +135,8 @@ class Crawler(ttk.Frame):
                 print(link)
             self.queue.join()
             print(str(len(queued_links)) + ' links in the queue')
+            if len(queued_links) == 0:
+                self.message.set("Complete!")
 
 
 if __name__ == '__main__':
