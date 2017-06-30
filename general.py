@@ -72,7 +72,9 @@ def file_to_set(file_name):
     results = set()
     with open(file_name, 'rt') as f:
         for line in f:
-            results.add(line.replace('\n', ''))
+            fields = line.split("|")
+            fields[1] = fields[1].replace('\n', '')
+            results.add((fields[0], fields[1]))
     return results
 
 
@@ -80,16 +82,18 @@ def file_to_set(file_name):
 def set_to_file(links, file_name, mode="w"):
     try:
         with open(file_name,mode) as f:
-            for l in sorted(links):
-                f.write(l+"\n")
+            for l in sorted(links, key=lambda k: k[0]):
+                if not "crawled" in file_name:
+                    f.write(l[0] + "|" + l[1] + "\n") #pip delimit source and link
+                else:
+                    f.write(l[1] + "\n")
     except Exception as e:
         print(str(e))
 
 def media_to_file(links, file_name, mode="r+"):
     try:
         with open(file_name,mode) as f:
-            for item in sorted(med):
-                
-                f.write(item+"\n")
+            for item in sorted(med, key=lambda k: k['link']):
+                f.write('On Page: ' +  item[0]+ "   ----------->   Item: " + item[1])
     except Exception as e:
         print(str(e))
