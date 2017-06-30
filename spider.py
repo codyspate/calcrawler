@@ -68,6 +68,16 @@ class Spider:
             Spider.crawled.add(page_url)
             Spider.update_files()
 
+    def data(self):
+        return ({
+            "queue": len(Spider.queue),
+            "crawled": len(Spider.crawled),
+            "pdf": Spider.num_pdf,
+            "webpage": Spider.pages,
+            "media": Spider.num_media,
+            "error": Spider.num_errors
+        })
+
     # Converts raw response data into readable information and checks for proper html formatting
     @staticmethod
     def gather_links(page_url):
