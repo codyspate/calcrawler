@@ -22,6 +22,7 @@ class Crawler(ttk.Frame):
         self.error_count = tkinter.IntVar()
         self.message = tkinter.StringVar(value="")
         self.PATH = tkinter.StringVar(value="")
+        self.done = False
         self.n = 0
 
 
@@ -129,9 +130,13 @@ class Crawler(ttk.Frame):
         dots = ""
         for _ in range(self.n):
             dots = dots + "."
-        self.message.set("Running" + dots)
-        self.update_nums()
+        if self.done:
+            self.message.set("Complete!")
+        else:
+            self.message.set("Running" + dots)
+            self.update_nums()
         self.after(500, self.clock)
+
 
 
     def crawl(self):
@@ -144,7 +149,8 @@ class Crawler(ttk.Frame):
             self.queue.join()
             print(str(len(queued_links)) + ' links in the queue')
             if len(queued_links) == 0:
-                self.message.set("Complete!")
+                self.done = True
+
 
 
 if __name__ == '__main__':

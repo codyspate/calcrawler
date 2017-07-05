@@ -1,0 +1,17 @@
+Cal Crawler v1.0
+
+Website: v5
+URL: http://v5.20.sites.ca.gov/
+
+PDF count: 0
+HTML/HTM count: 95
+Media files: 507
+Other: 0
+Errors: 1
+
+Total Number of Pages: 98
+Total size: 43.085 MB
+
+Queue: 0
+Crawled:  98
+

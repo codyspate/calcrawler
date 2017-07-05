@@ -2,6 +2,7 @@ missing module named resource - imported by posix, C:\Users\cody.spate\Dev\calcr
 missing module named posix - imported by os, C:\Users\cody.spate\Dev\calcrawler\main.py
 missing module named _posixsubprocess - imported by subprocess, C:\Users\cody.spate\Dev\calcrawler\main.py
 missing module named 'org.python' - imported by pickle, C:\Users\cody.spate\Dev\calcrawler\main.py, xml.sax
+missing module named ce - imported by os, C:\Users\cody.spate\Dev\calcrawler\main.py
 missing module named readline - imported by cmd, code, pdb, C:\Users\cody.spate\Dev\calcrawler\main.py
 excluded module named _frozen_importlib - imported by importlib, importlib.abc, C:\Users\cody.spate\Dev\calcrawler\main.py
 missing module named _frozen_importlib_external - imported by importlib._bootstrap, importlib, importlib.abc, C:\Users\cody.spate\Dev\calcrawler\main.py
@@ -12,7 +13,6 @@ missing module named 'java.lang' - imported by platform, C:\Users\cody.spate\Dev
 missing module named vms_lib - imported by platform, C:\Users\cody.spate\Dev\calcrawler\main.py
 missing module named termios - imported by tty, getpass, C:\Users\cody.spate\Dev\calcrawler\main.py
 missing module named grp - imported by tarfile, shutil, C:\Users\cody.spate\Dev\calcrawler\main.py
+missing module named _dummy_threading - imported by dummy_threading, C:\Users\cody.spate\Dev\calcrawler\main.py
 missing module named org - imported by copy, C:\Users\cody.spate\Dev\calcrawler\main.py
 missing module named pwd - imported by posixpath, tarfile, shutil, http.server, webbrowser, netrc, getpass, C:\Users\cody.spate\Dev\calcrawler\main.py
-missing module named ce - imported by os, C:\Users\cody.spate\Dev\calcrawler\main.py
-missing module named _dummy_threading - imported by dummy_threading, C:\Users\cody.spate\Dev\calcrawler\main.py
