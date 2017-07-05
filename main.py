@@ -133,6 +133,7 @@ class Crawler(ttk.Frame):
             dots = dots + "."
         if self.done:
             self.message.set("Complete!")
+            self.update_nums()
             self.clean_files()
         else:
             self.message.set("Running" + dots)

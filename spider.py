@@ -95,7 +95,7 @@ class Spider:
 
             if 'pdf' in response.info()['Content-Type']:
                 Spider.num_pdf += 1
-            media_types = ['.mp3', '.jpg', '.png', '.mpeg', '.ico', '.wmv', '.avi', '.mov', '.mng', '.gif', '.bmp', '.jpeg']
+            media_types = ['.mp3', '.jpg', '.png', '.mpeg', '.ico', '.wmv', '.avi', '.mov', '.mng', '.mp4', '.gif', '.bmp', '.jpeg']
             for t in media_types:
                 if t in page_url[1].lower():
                     Spider.num_media += 1
