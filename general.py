@@ -83,10 +83,8 @@ def set_to_file(links, file_name, mode="w"):
     try:
         with open(file_name,mode) as f:
             for l in sorted(links, key=lambda k: k[0]):
-                if not "crawled" in file_name:
-                    f.write(l[0] + "|" + l[1] + "\n") #pip delimit source and link
-                else:
-                    f.write(l[1] + "\n")
+                f.write(l[0] + "|" + l[1] + "\n") #pip delimit source and link
+
     except Exception as e:
         print(str(e))
 
@@ -97,3 +95,19 @@ def media_to_file(links, file_name, mode="r+"):
                 f.write('On Page: ' +  item[0]+ "   ----------->   Item: " + item[1])
     except Exception as e:
         print(str(e))
+
+def make_file_readable(file_name):
+    results = set()
+    try:
+        with open(file_name, "r") as f:
+            for line in f:
+                fields = line.split("|")
+                fields[1] = fields[1].replace('\n', '')
+                results.add((fields[0], fields[1]))
+    except Exception as e:
+        print(str(e))
+    delete_file_contents(file_name)
+    with open(file_name, "a") as f:
+        for l in sorted(results, key=lambda k: k[0]):
+            f.write("Source: " + l[0] + "\n")
+            f.write("Data: " + l[1] + "\n\n")

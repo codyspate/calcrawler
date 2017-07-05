@@ -15,11 +15,15 @@ class LinkFinder(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag == 'a':
             for (attribute, value) in attrs:
+                end = value.rsplit('/', 1)[-1]
                 if attribute == 'href':
+                    if len(end) > 0:
+                        if end[0] == "#":
+                            continue
                     url = parse.urljoin(self.base_url, value)
                     link = (self.page_url, url)
                     self.links.add(link)
-        elif tag == 'img':
+        elif tag == 'img' or tag == 'source' or tag == 'video':
             for (attribute, value) in attrs:
                 if attribute == 'src':
                     try:

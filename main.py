@@ -87,6 +87,7 @@ class Crawler(ttk.Frame):
         self.QUEUE_FILE = 'projects/' + self.PROJECT_NAME + '/queue.txt'
         self.CRAWLED_FILE = 'projects/' + self.PROJECT_NAME + '/crawled.txt'
         self.SUMMARY_FILE = 'projects/' + self.PROJECT_NAME + '/summary.txt'
+        self.MEDIA_FILE = 'projects/' + self.PROJECT_NAME + '/media.txt'
         self.NUMBER_OF_THREADS = int(self.num_crawlers.get())
         self.queue = Queue()
         self.spider = Spider(self.PROJECT_NAME, self.HOMEPAGE, self.DOMAIN_NAME)
@@ -132,12 +133,15 @@ class Crawler(ttk.Frame):
             dots = dots + "."
         if self.done:
             self.message.set("Complete!")
+            self.clean_files()
         else:
             self.message.set("Running" + dots)
             self.update_nums()
-        self.after(500, self.clock)
+            self.after(500, self.clock)
 
-
+    def clean_files(self):
+        make_file_readable(self.CRAWLED_FILE)
+        make_file_readable(self.MEDIA_FILE)
 
     def crawl(self):
         queued_links = file_to_set(self.QUEUE_FILE)
