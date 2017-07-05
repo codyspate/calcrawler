@@ -109,7 +109,7 @@ class Spider:
             response.close()
         except Exception as e:
             print(str(e))
-            append_to_file(Spider.errors_file, str(e) + '\n\tON PAGE: ' + page_url[0] + '\n\tLink: ' + page_url[1])
+            append_to_file(Spider.errors_file, str(e) + '\n\tON PAGE: ' + page_url[0] + '\n\tLink: ' + page_url[1] + "\n")
             Spider.num_errors += 1
             return set()
 
@@ -133,7 +133,9 @@ class Spider:
     @staticmethod
     def add_links_to_queue(links):
         for url in links:
-            if any(url[1] == item[1] for item in Spider.queue) or any(url[1] == item[1] for item in Spider.crawled):
+            t_queue = Spider.queue.copy()
+            t_crawled = Spider.crawled.copy()
+            if any(url[1] == item[1] for item in t_queue) or any(url[1] == item[1] for item in t_crawled):
                 continue
             if not Spider.domain_name in get_domain_name(url[1]) and not url[1][0] == '/':
                 continue

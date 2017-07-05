@@ -33,16 +33,16 @@ class Crawler(ttk.Frame):
         self.grid(column=0, row=0, sticky='nsew')
 
         self.url = ttk.Entry(self, width=30)
-        self.url.grid(column=1, row=1)
+        self.url.grid(column=1, row=1, sticky="w")
 
         self.num_crawlers = ttk.Entry(self, width=5)
         self.num_crawlers.insert(0, "16")
-        self.num_crawlers.grid(column=1, row=2)
+        self.num_crawlers.grid(column=1, row=2, stick="w")
 
         ttk.Label(self, text='Crawler').grid(column=0, row=0,
             columnspan=4)
-        ttk.Label(self, text='Base URL').grid(column=0, row=1)
-        ttk.Label(self, text='Number of crawlers (default 16)').grid(column=0, row=2)
+        ttk.Label(self, text='Base URL').grid(column=0, row=1, stick="ew")
+        ttk.Label(self, text='Number of crawlers').grid(column=0, row=2, stick="ew")
         self.start_button = ttk.Button(self, text='Start Crawl', command=self.start)
         self.start_button.grid(column=0, row=3, columnspan=4)
 
@@ -69,9 +69,9 @@ class Crawler(ttk.Frame):
         ttk.Separator(self, orient='horizontal').grid(column=0, row=11, columnspan=4, sticky='ew')
 
         ttk.Label(self, text='Logs path').grid(column=0, row=12)
-        ttk.Label(self, textvariable=self.PATH).grid(column=1, row=12)
+        ttk.Label(self, textvariable=self.PATH).grid(column=1, row=12, stick="w")
 
-        ttk.Label(self, textvariable=self.message).grid(column=0, row=14, columnspan=4)
+        ttk.Label(self, textvariable=self.message).grid(column=0, row=14, columnspan=4, sticky="ew")
 
         for child in self.winfo_children():
             child.grid_configure(padx=5, pady=5)
@@ -90,7 +90,11 @@ class Crawler(ttk.Frame):
         self.queue = Queue()
         self.spider = Spider(self.PROJECT_NAME, self.HOMEPAGE, self.DOMAIN_NAME)
         self.create_workers()
-        self.crawl()
+        self.start_button.destroy()
+        clock = threading.Thread(target=self.clock)
+        crawl = threading.Thread(target=self.crawl)
+        clock.start()
+        crawl.start()
 
 
     # Create worker threads (will die when main exits)
@@ -118,17 +122,21 @@ class Crawler(ttk.Frame):
         self.error_count.set(data['error'])
         self.update_idletasks()
 
+    def clock(self):
+        self.n += 1
+        if self.n > 3:
+            self.n=1
+        dots = ""
+        for _ in range(self.n):
+            dots = dots + "."
+        self.message.set("Running" + dots)
+        self.update_nums()
+        self.after(500, self.clock)
+
+
     def crawl(self):
         queued_links = file_to_set(self.QUEUE_FILE)
         while len(queued_links) > 0:
-            self.n += 1
-            if self.n > 3:
-                self.n=1
-            dots = ""
-            for _ in range(self.n):
-                dots = dots + "."
-            self.message.set("Running" + dots)
-            self.update_nums()
             queued_links = file_to_set(self.QUEUE_FILE)
             for link in queued_links:
                 self.queue.put(link)
